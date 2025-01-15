@@ -9,7 +9,7 @@ DISTRO=$(grep '^ID=' /etc/os-release | cut -d '=' -f 2)
 failed_installs=()
 handle_error() {
     local failed_command="$BASH_COMMAND"
-    error_list+=("Error occurred during: $failed_command")
+    failed_installs+=("Error occurred during: $failed_command")
 }
 trap 'handle_error' ERR
 set +e
@@ -22,7 +22,7 @@ else
 fi
 
 # Install tools available on distro package managers without anything extra
-TOOLS=(curl wget zsh git gh fzf jq golang nodejs )
+TOOLS=(curl wget zsh git gh fzf jq golang nodejs make )
 
 check_version() {
     local tool=$1
@@ -100,19 +100,18 @@ fi
 
 # these need to be installed with zsh active
 zsh_install="
-#fastTravelCLI
 git clone https://github.com/osteensco/fastTravelCLI.git
-cd ~/fastTravelCLI
+cd fastTravelCLI
 bash install/linux.sh
 cd ~/
 rm -rf ~/fastTravelCLI
 
-#oh-my-zsh
-if [ ! -d \"$HOME/.oh-my-zsh\" ]; then
-    sh -c \"$(curl -fsSL https://install.ohmyz.sh/)\" -- unattended
-fi
 
+if [ ! -d \"\$HOME/.oh-my-zsh\" ]; then
+    sh -c \"\$(curl -fsSL https://install.ohmyz.sh/)\" -- unattended
+fi
 "
+
 
 if [ ! "${0##*/}" = "zsh" ]; then
     zsh -i -c "$zsh_install"
@@ -131,7 +130,7 @@ mkdir -p ~/.config
 ln -sf ~/.dotfiles/nvim ~/.config/
 
 # Cache Github creds
-gh auth login
+gh auth login --web -p https
 
 # Output anything that failed
 if [ ${#failed_installs[@]} -ne 0 ]; then

@@ -1,0 +1,11 @@
+services:
+  dotfiles_test:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: osteensco_dotfiles_test
+    volumes:
+        - .:/root/.dotfiles
+    stdin_open: true
+    tty: true
+
