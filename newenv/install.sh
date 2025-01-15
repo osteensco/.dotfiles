@@ -85,31 +85,31 @@ nvim_install() {
 check_version nvim nvim_install
 
 #docker and nerdfont
-if [ -z "$WSL_DISTRO_NAME" ]; then
-    docker_install() {
-        curl -fsSL https://get.docker.com -o get-docker.sh
-        sudo sh get-docker.sh
-    }
-    check_version docker docker_install
-
-    curl -OL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Mononoki.tar.xz
-    mkdir -p ~/.fonts
-    tar -xf Mononoki.tar.xz -C ~/.fonts
-    sudo rm Mononoki.tar.xz
-fi
+# if [ -z "$WSL_DISTRO_NAME" ]; then
+#     docker_install() {
+#         curl -fsSL https://get.docker.com -o get-docker.sh
+#         sudo sh get-docker.sh
+#     }
+#     check_version docker docker_install
+#
+#     curl -OL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Mononoki.tar.xz
+#     mkdir -p ~/.fonts
+#     tar -xf Mononoki.tar.xz -C ~/.fonts
+#     sudo rm Mononoki.tar.xz
+# fi
 
 # these need to be installed with zsh active
 zsh_install="
+if [ ! -d \"\$HOME/.oh-my-zsh\" ]; then
+    sh -c \"\$(curl -fsSL https://install.ohmyz.sh)\" -- unattended
+fi
+
 git clone https://github.com/osteensco/fastTravelCLI.git
 cd fastTravelCLI
 bash install/linux.sh
 cd ~/
 rm -rf ~/fastTravelCLI
-
-
-if [ ! -d \"\$HOME/.oh-my-zsh\" ]; then
-    sh -c \"\$(curl -fsSL https://install.ohmyz.sh/)\" -- unattended
-fi
+exit
 "
 
 
@@ -130,7 +130,7 @@ mkdir -p ~/.config
 ln -sf ~/.dotfiles/nvim ~/.config/
 
 # Cache Github creds
-gh auth login --web -p https
+gh auth login
 
 # Output anything that failed
 if [ ${#failed_installs[@]} -ne 0 ]; then
