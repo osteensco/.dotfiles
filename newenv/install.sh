@@ -99,12 +99,10 @@ check_version ft ft_install
 curl -fsSL https://deno.land.install.sh | sh
 
 # Install nerdfont
-if ! fc-list | grep -i "Mononoki Nerd Font" > /dev/null; then
-    curl -OL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Mononoki.tar.xz
-    mkdir -p ~/.fonts
-    tar -xf Mononoki.tar.xz -C ~/.fonts
-    fc-cache -fv
-fi
+curl -OL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Mononoki.tar.xz
+mkdir -p ~/.fonts
+tar -xf Mononoki.tar.xz -C ~/.fonts
+fc-cache -fv
 
 #oh-my-zsh
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
