@@ -84,22 +84,21 @@ nvim_install() {
 }
 check_version nvim nvim_install
 
-#docker
+#docker and nerdfont
 if [ -z "$WSL_DISTRO_NAME" ]; then
     docker_install() {
         curl -fsSL https://get.docker.com -o get-docker.sh
         sudo sh get-docker.sh
     }
     check_version docker docker_install
+
+    curl -OL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Mononoki.tar.xz
+    mkdir -p ~/.fonts
+    tar -xf Mononoki.tar.xz -C ~/.fonts
+    sudo rm Mononoki.tar.xz
 fi
 
-# Install nerdfont
-curl -OL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Mononoki.tar.xz
-mkdir -p ~/.fonts
-tar -xf Mononoki.tar.xz -C ~/.fonts
-sudo rm Mononoki.tar.xz
-
-# zsh specific
+# these need to be installed with zsh active
 zsh_install="
 #fastTravelCLI
 git clone https://github.com/osteensco/fastTravelCLI.git
@@ -141,4 +140,6 @@ if [ ${#failed_installs[@]} -ne 0 ]; then
 else
     echo "All items successfully installed."
 fi
+
+echo "Restart shell for all updates to take effect."
 
