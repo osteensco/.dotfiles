@@ -100,25 +100,28 @@ tar -xf Mononoki.tar.xz -C ~/.fonts
 sudo rm Mononoki.tar.xz
 
 # zsh specific
-zsh_install="
-#fastTravelCLI
-git clone https://github.com/osteensco/fastTravelCLI.git
-cd fastTravelCLI
-bash install/linux.sh
-cd ~/
-rm -rf ~/fastTravelCLI
+zsh_install() {
+    # fastTravelCLI
+    git clone https://github.com/osteensco/fastTravelCLI.git
+    cd ~/fastTravelCLI || exit
+    bash install/linux.sh
+    cd ~/
+    rm -rf ~/fastTravelCLI
 
-#oh-my-zsh
-if [ ! -d \"$HOME/.oh-my-zsh\" ]; then
-    sh -c \"$(curl -fsSL https://install.ohmyz.sh/)\" -- unattended
-fi
-
-"
+    # oh-my-zsh
+    if [ ! -d "$HOME/.oh-my-zsh" ]; then
+        sh -c "$(curl -fsSL https://install.ohmyz.sh)" -- --unattended
+    fi
+}
 
 if [ ! "${0##*/}" = "zsh" ]; then
-    zsh -i -c "$zsh_install"
+    echo "Switching to Zsh..."
+    zsh -i <<EOF
+$(declare -f zsh_install)
+zsh_install
+EOF
 else
-    eval "$zsh_install"
+    zsh_install
 fi
 
 #p10k
