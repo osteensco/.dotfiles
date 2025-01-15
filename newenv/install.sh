@@ -97,6 +97,7 @@ fi
 curl -OL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Mononoki.tar.xz
 mkdir -p ~/.fonts
 tar -xf Mononoki.tar.xz -C ~/.fonts
+sudo rm Mononoki.tar.xz
 
 # zsh specific
 zsh_install="
@@ -109,8 +110,9 @@ rm -rf ~/fastTravelCLI
 
 #oh-my-zsh
 if [ ! -d \"$HOME/.oh-my-zsh\" ]; then
-    sh -c \"$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/master/tools/install.sh)\" -- --unattended
+    sh -c \"$(curl -fsSL https://install.ohmyz.sh/)\" -- unattended
 fi
+
 "
 
 if [ ! "${0##*/}" = "zsh" ]; then
@@ -118,6 +120,9 @@ if [ ! "${0##*/}" = "zsh" ]; then
 else
     eval "$zsh_install"
 fi
+
+#p10k
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 
 # Add sym links
 ln -sf ~/.dotfiles/.zshrc ~/
