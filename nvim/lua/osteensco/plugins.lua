@@ -150,7 +150,7 @@ return {
     },
 
     {
-        dir = "/mnt/d/Programming stuff/opensauce/shadow-clone.nvim",
+        dir = "/mnt/c/Users/ostee/Desktop/Repos/opensauce/shadow-clone.nvim",
     },
     -- {
     --     "linux-cultist/venv-selector.nvim",
