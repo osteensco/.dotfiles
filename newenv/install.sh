@@ -14,6 +14,13 @@ handle_error() {
 trap 'handle_error' ERR
 set -e
 
+# Ensure package managers are up to date
+if [ "$DISTRO" = "fedora" ]; then
+    sudo dnf update
+else
+    sudo apt update
+fi
+
 # Install tools available on distro package managers without anything extra
 TOOLS=(curl wget zsh git gh fzf jq golang nodejs )
 
@@ -42,6 +49,8 @@ for tool in "${TOOLS[@]}"; do
     check_version  "$tool" install_tool
 done
 
+# switch to zsh
+exec zsh
 
 # Other tools
 
@@ -95,14 +104,10 @@ ft_install() {
 }
 check_version ft ft_install
 
-#deno
-curl -fsSL https://deno.land.install.sh | sh
-
 # Install nerdfont
 curl -OL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Mononoki.tar.xz
 mkdir -p ~/.fonts
 tar -xf Mononoki.tar.xz -C ~/.fonts
-fc-cache -fv
 
 #oh-my-zsh
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
