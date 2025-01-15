@@ -49,9 +49,6 @@ for tool in "${TOOLS[@]}"; do
     check_version  "$tool" install_tool
 done
 
-# switch to zsh
-exec zsh
-
 # Other tools
 
 #python
@@ -94,30 +91,37 @@ docker_install() {
 }
 check_version docker docker_install
 
-#fastTravelCLI
-ft_install() {
-    git clone https://github.com/osteensco/fastTravelCLI.git
-    cd fastTravelCLI
-    bash install/linux.sh
-    cd ~/
-    rm -rf ~/fastTravelCLI
-}
-check_version ft ft_install
-
 # Install nerdfont
 curl -OL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Mononoki.tar.xz
 mkdir -p ~/.fonts
 tar -xf Mononoki.tar.xz -C ~/.fonts
 
+# zsh specific
+zsh_install="
+#fastTravelCLI
+git clone https://github.com/osteensco/fastTravelCLI.git
+cd fastTravelCLI
+bash install/linux.sh
+cd ~/
+rm -rf ~/fastTravelCLI
+
 #oh-my-zsh
-if [ ! -d "$HOME/.oh-my-zsh" ]; then
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/master/tools/install.sh)" -- --unattended
+if [ ! -d \"$HOME/.oh-my-zsh\" ]; then
+    sh -c \"$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/master/tools/install.sh)\" -- --unattended
+fi
+"
+
+if [ ! "${0##*/}" = "zsh" ]; then
+    zsh -i -c "$zsh_install"
+else
+    eval "$zsh_install"
 fi
 
 # Add sym links
 ln -sf ~/.dotfiles/.zshrc ~/
 ln -sf ~/.dotfiles/.p10k.zsh ~/   
 ln -sf ~/.dotfiles/.gitconfig ~/
+mkdir -p ~/.config
 ln -sf ~/.dotfiles/nvim ~/.config/
 
 # Cache Github creds
