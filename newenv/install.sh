@@ -12,13 +12,13 @@ handle_error() {
     error_list+=("Error occurred during: $failed_command")
 }
 trap 'handle_error' ERR
-set -e
+set +e
 
 # Ensure package managers are up to date
 if [ "$DISTRO" = "fedora" ]; then
-    sudo dnf update
+    sudo dnf update -y
 else
-    sudo apt update
+    sudo apt update -y
 fi
 
 # Install tools available on distro package managers without anything extra
@@ -29,7 +29,7 @@ check_version() {
     local callback=$2
 
     if command -v "$tool" &> /dev/null; then
-        echo "$tool version: $($tool --version 2>/dev/null || $tool -v 2>/dev/null || $tool version 2>/dev/null || echo 'Version check failed but tool found: $tool')"
+        echo "$tool version: $($tool --version 2>/dev/null || $tool -v 2>/dev/null || $tool version 2>/dev/null || echo \"Version check failed but tool found: $tool\")"
     else
         echo "$tool not found. Installing..."
         "$callback" "$tool"
@@ -85,11 +85,13 @@ nvim_install() {
 check_version nvim nvim_install
 
 #docker
-docker_install() {
-    curl -fsSL https://get.docker.com -o get-docker.sh
-    sudo sh get-docker.sh
-}
-check_version docker docker_install
+if [ -z "$WSL_DISTRO_NAME" ]; then
+    docker_install() {
+        curl -fsSL https://get.docker.com -o get-docker.sh
+        sudo sh get-docker.sh
+    }
+    check_version docker docker_install
+fi
 
 # Install nerdfont
 curl -OL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Mononoki.tar.xz
