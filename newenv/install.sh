@@ -9,14 +9,9 @@ DISTRO=$(grep '^ID=' /etc/os-release | cut -d '=' -f 2)
 set -e
 trap 'echo "Ran into an error, exiting script."; exit 1;' ERR
 
-# Install nerdfont
-curl -OL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Mononoki.tar.xz
-mkdir -p ~/.fonts
-tar -xf Mononoki.tar.xz -C ~/.fonts
-fc-cache -fv
 
 # Install tools available on distro package managers without anything extra
-TOOLS=(zsh git gh fzf jq lua golang python nodejs )
+TOOLS=(curl wget zsh git gh fzf jq lua golang python nodejs )
 
 for tool in "${TOOLS[@]}"; do
     if command -v $tool &> /dev/null; then
@@ -51,6 +46,12 @@ cd fastTravelCLI
 bash install/linux.sh
 cd ~/
 rm -rf ~/fastTravelCLI
+
+# Install nerdfont
+curl -OL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Mononoki.tar.xz
+mkdir -p ~/.fonts
+tar -xf Mononoki.tar.xz -C ~/.fonts
+fc-cache -fv
 
 #oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/master/tools/install.sh)" -- --unattended
