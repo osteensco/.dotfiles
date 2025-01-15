@@ -5,13 +5,17 @@
 # ID distro
 DISTRO=$(grep '^ID=' /etc/os-release | cut -d '=' -f 2)
 
-# Exit script if we run into an error
+# Capture everything that fails to install properly
+failed_installs=()
+handle_error() {
+    local failed_command="$BASH_COMMAND"
+    error_list+=("Error occurred during: $failed_command")
+}
+trap 'handle_error' ERR
 set -e
-trap 'echo "Ran into an error, exiting script."; exit 1;' ERR
-
 
 # Install tools available on distro package managers without anything extra
-TOOLS=(curl wget zsh git gh fzf jq lua golang python nodejs )
+TOOLS=(curl wget zsh git gh fzf jq golang python nodejs )
 
 for tool in "${TOOLS[@]}"; do
     if command -v $tool &> /dev/null; then
@@ -34,6 +38,13 @@ if [ "$DISTRO" = "fedora" ]; then
     sudo dnf install -y neovim python3-neovim
 else 
     sudo apt install -y neovim python3-neovim
+fi
+
+#lua 
+if [ "$DISTRO" = "fedora" ]; then
+    sudo dnf install lua -y
+else 
+    sudo apt install lua5.4
 fi
 
 #docker
@@ -69,5 +80,11 @@ ln -sf ~/.dotfiles/nvim ~/.config/
 # Cache Github creds
 gh auth login
 
-
+# Output anything that failed
+if [ ${#failed_installs[@]} -ne 0 ]; then
+    echo "The following failed to install:"
+    printf '%s\n' "${failed_installs[@]}"
+else
+    echo "All items successfully installed."
+fi
 
