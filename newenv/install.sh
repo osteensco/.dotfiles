@@ -22,7 +22,7 @@ else
 fi
 
 # Install tools available on distro package managers without anything extra
-TOOLS=(curl wget zsh git gh fzf jq golang nodejs make )
+TOOLS=(curl tree wget zsh git gh fzf jq golang nodejs make)
 
 check_version() {
     local tool=$1
