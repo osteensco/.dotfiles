@@ -145,7 +145,7 @@ return {
 
     {
         'osteensco/discordStatus.nvim',
-        -- dir = "/mnt/d/Programming Stuff/opensauce/discordStatus.nvim",
+        -- dir = "/mnt/c/Users/ostee/Desktop/Repos/opensauce/discordStatus.nvim",
         dependencies = { "osteensco/dotenv.nvim" },
     },
 
