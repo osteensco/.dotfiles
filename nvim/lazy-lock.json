@@ -3,7 +3,7 @@
   "arrow.nvim": { "branch": "master", "commit": "5438c977e729a29d96bd54c8da3103154e80dbd1" },
   "blink.cmp": { "branch": "main", "commit": "1cc3b1a908fbcfd15451c4772759549724f38524" },
   "diffview.nvim": { "branch": "main", "commit": "4516612fe98ff56ae0415a259ff6361a89419b0a" },
-  "discordStatus.nvim": { "branch": "main", "commit": "494a5bee692c9d63ec169b6a0b6ba2ea3f938da5" },
+  "discordStatus.nvim": { "branch": "main", "commit": "e0cf6989d1ba86f241957146d3917e577bc6a454" },
   "dotenv.nvim": { "branch": "main", "commit": "6a87927faba45dadb01c06fc1f64ff71e20eb2bd" },
   "friendly-snippets": { "branch": "main", "commit": "efff286dd74c22f731cdec26a70b46e5b203c619" },
   "lazy.nvim": { "branch": "main", "commit": "d8f26efd456190241afd1b0f5235fe6fdba13d4a" },
