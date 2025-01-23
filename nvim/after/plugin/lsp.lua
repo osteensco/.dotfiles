@@ -4,6 +4,21 @@ local mason_lspconfig = require("mason-lspconfig")
 
 local lsp_zero = require("lsp-zero")
 
+vim.diagnostic.config({
+    float = {
+        border = 'rounded',
+    },
+})
+vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
+    vim.lsp.handlers.hover,
+    { border = 'rounded' }
+)
+
+vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
+    vim.lsp.handlers.signature_help,
+    { border = 'rounded' }
+)
+
 local on_attach = function(_, bufnr)
     local bufmap = function(keys, func, desc)
         vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
@@ -53,7 +68,8 @@ mason_lspconfig.setup({
         "bashls",
         "cssls",
         "html",
-        "jsonls" }
+        "jsonls"
+    }
 })
 
 -- generic fallback setup
