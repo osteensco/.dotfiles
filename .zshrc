@@ -115,9 +115,14 @@ source $ZSH/oh-my-zsh.sh
 
 
 #PATH
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 export PATH="/usr/local/go/bin:$PATH"
 export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
 export CDPATH="$HOME/.local:$CDPATH"
+
+#ENV VARS
+export CUDACXX="/usr/local/cuda-12/bin/nvcc"
 
 
 #FastTravel
