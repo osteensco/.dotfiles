@@ -114,6 +114,20 @@ source $ZSH/oh-my-zsh.sh
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 
+# Sometimes wsl acts funny so we have to symlink stuff.
+if [ -n "$WSL_INTEROP" ]; then
+
+    # Ensure the clipboard is set in wsl.
+    if [ ! -L /run/user/1000/wayland-0 ]; then
+        # Create the symbolic link
+        sudo ln -s /mnt/wslg/runtime-dir/wayland-0 /run/user/1000/wayland-0
+    fi
+
+fi
+
+
+
+
 #PATH
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
