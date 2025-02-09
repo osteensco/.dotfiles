@@ -122,8 +122,6 @@ export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
 export CDPATH="$HOME/.local:$CDPATH"
 
 #ENV VARS
-export CUDACXX="/usr/local/cuda-12/bin/nvcc"
-
 
 #FastTravel
 export FT_EXE_PATH="/home/osteensco/.local/share/fastTravelCLI/fastTravel.exe"

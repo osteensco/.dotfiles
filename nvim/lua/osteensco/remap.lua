@@ -54,7 +54,7 @@ vim.keymap.set('x', '<leader>p', '\"_dP',
 
 --copy to system clipboard
 vim.keymap.set({ 'n', 'v' }, '<leader>y', '\"+y', { desc = "copy to system clipboard" })
-vim.keymap.set({ 'n', 'v' }, '<leader>Y', '\"+Y', { desc = "copy to system clipboard" })
+-- vim.keymap.set({ 'n', 'v' }, '<leader>Y', '\"+Y', { desc = "copy to system clipboard" })
 
 --delete to void buffer
 vim.keymap.set({ 'n', 'v' }, '<leader>d', '\"_d', { desc = "deletes, contents sent to void buffer" })
