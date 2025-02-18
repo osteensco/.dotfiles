@@ -1,36 +1,31 @@
+local telescope = require('telescope')
 local builtin = require('telescope.builtin')
 
-
-local function get_telescope_pickers_with_theme(default_theme)
-    local pickers = {}
-
-    for picker_name, _ in pairs(builtin) do
-        pickers[picker_name] = {
-            theme = default_theme or "ivy",
-        }
-    end
-
-    return pickers
-end
-
-local pickers = get_telescope_pickers_with_theme()
-
-require('telescope').setup({
+telescope.setup({
     defaults = {
+        layout_strategy = "bottom_pane",
+        layout_config = {
+            height = 0.9,
+            prompt_position = "bottom",
+        },
+        border = true,
         mappings = {
             i = {
+                ["<C-h>"] = "which_key",
                 ["<Tab>"] = "move_selection_next",
                 ["<S-Tab>"] = "move_selection_previous",
                 ["<C-a>"] = "add_selection",
                 ["<C-r>"] = "remove_selection",
+                -- ["<S-Right>"] = "results_scrolling_right",
+                -- ["<S-Left>"] = "results_scrolling_left",
             },
+
         }
     },
-    pickers = pickers,
     extensions = { fzf = {} }
 })
 
-require('telescope').load_extension('fzf')
+telescope.load_extension('fzf')
 
 vim.keymap.set('n', '<leader>tt', builtin.find_files, { desc = '[t]elescope [f]ind [f]iles, looks at all files' })
 vim.keymap.set('n', '<leader>tf', builtin.git_files,
