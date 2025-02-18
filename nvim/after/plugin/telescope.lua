@@ -16,8 +16,8 @@ telescope.setup({
                 ["<S-Tab>"] = "move_selection_previous",
                 ["<C-a>"] = "add_selection",
                 ["<C-r>"] = "remove_selection",
-                -- ["<S-Right>"] = "results_scrolling_right",
-                -- ["<S-Left>"] = "results_scrolling_left",
+                ["<S-Right>"] = "results_scrolling_right",
+                ["<S-Left>"] = "results_scrolling_left",
             },
 
         }
