@@ -87,9 +87,9 @@ check_version nvim nvim_install
 
 ## ---- UNCOMMENT IF NOT USING WSL ----
 #
-# In WSL, docker and nerdfont are used by windows directly. These would need to be installed manually if using WSL.
+## In WSL, docker and nerdfont are used by windows directly. These would need to be installed manually if using WSL.
 #
-#docker and nerdfont
+##docker and nerdfont
 # if [ -z "$WSL_DISTRO_NAME" ]; then
 #     docker_install() {
 #         curl -fsSL https://get.docker.com -o get-docker.sh
