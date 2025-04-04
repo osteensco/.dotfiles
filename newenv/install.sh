@@ -90,7 +90,7 @@ check_version nvim nvim_install
 ## In WSL, docker and nerdfont are used by windows directly. These would need to be installed manually if using WSL.
 #
 ##docker and nerdfont
-# if [ -z "$WSL_DISTRO_NAME" ]; then
+#
 #     docker_install() {
 #         curl -fsSL https://get.docker.com -o get-docker.sh
 #         sudo sh get-docker.sh
@@ -101,7 +101,7 @@ check_version nvim nvim_install
 #     mkdir -p ~/.fonts
 #     tar -xf Mononoki.tar.xz -C ~/.fonts
 #     sudo rm Mononoki.tar.xz
-# fi
+#
 #
 ## ---- ---- ---- ---- ---- ---- ----
 
