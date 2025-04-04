@@ -120,6 +120,7 @@ if [ -n "$WSL_INTEROP" ]; then
     # Ensure the clipboard is set in wsl.
     if [ ! -L /run/user/1000/wayland-0 ]; then
         # Create the symbolic link
+        # This will prompt user to login
         sudo ln -s /mnt/wslg/runtime-dir/wayland-0 /run/user/1000/wayland-0
     fi
 
