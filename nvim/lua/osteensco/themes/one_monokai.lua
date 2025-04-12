@@ -6,3 +6,5 @@ require("one_monokai").setup({
     end,
     italics = true,
 })
+
+return "one_monokai"
