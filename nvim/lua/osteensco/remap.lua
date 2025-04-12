@@ -19,7 +19,7 @@ vim.keymap.set('n', '<leader>nb', '<Cmd>Neotree buffers float<CR>', { desc = 'Op
 vim.keymap.set('n', '<leader>q', '<Cmd>q<CR>', { desc = "Quit current window." })
 
 --ctrl+s for saving
-vim.keymap.set({ 'n', 'i', 'v' }, '<C-s>', '<Esc>:w<Enter>', { desc = "write current file" })
+-- vim.keymap.set({ 'n', 'i', 'v' }, '<C-s>', '<Esc>:w<Enter>', { desc = "write current file" })
 
 --source current buffer
 vim.keymap.set('n', '<leader><leader>s', function()

@@ -85,6 +85,16 @@ nvim_install() {
 check_version nvim nvim_install
 
 
+#tmux
+tmux_install() {
+    if [ "$DISTRO" = "fedora" ]; then
+        sudo dnf install -y tmux
+    else 
+        sudo apt install -y tmux
+    fi
+}
+check_version tmux tmux_install
+
 ## ---- UNCOMMENT IF NOT USING WSL ----
 #
 ## In WSL, docker and nerdfont are used by windows directly. These would need to be installed manually if using WSL.
@@ -135,6 +145,7 @@ ln -sf ~/.dotfiles/.p10k.zsh ~/
 ln -sf ~/.dotfiles/.gitconfig ~/
 mkdir -p ~/.config
 ln -sf ~/.dotfiles/nvim ~/.config/
+ln -sf ~/.dotfiles/.tmux.config ~/
 
 # Cache Github creds
 gh auth login
