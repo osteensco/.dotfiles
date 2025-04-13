@@ -145,7 +145,7 @@ ln -sf ~/.dotfiles/.p10k.zsh ~/
 ln -sf ~/.dotfiles/.gitconfig ~/
 mkdir -p ~/.config
 ln -sf ~/.dotfiles/nvim ~/.config/
-ln -sf ~/.dotfiles/.tmux.config ~/
+ln -sf ~/.dotfiles/.tmux.conf ~/
 
 # Cache Github creds
 gh auth login
