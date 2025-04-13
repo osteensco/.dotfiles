@@ -1,10 +1,6 @@
 # Autostart tmux
-if [ ! -n "$TMUX" ]; then
-    if ! tmux has-session -t main 2>/dev/null; then 
-        tmux new-session -s main
-    else 
-        tmux attach-session -t main
-    fi
+if [[ ! -n "$TMUX" && -n "$PS1" ]]; then
+    tmux new -A -s main
 fi
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
