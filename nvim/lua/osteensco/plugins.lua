@@ -144,13 +144,10 @@ return {
 
     {
         'osteensco/discordStatus.nvim',
-        -- dir = "/mnt/c/Users/ostee/Desktop/Repos/opensauce/discordStatus.nvim",
         dependencies = { "osteensco/dotenv.nvim" },
     },
 
-    {
-        dir = "/mnt/c/Users/ostee/Desktop/Repos/opensauce/shadow-clone.nvim",
-    },
+
     -- {
     --     "linux-cultist/venv-selector.nvim",
     --     dependencies = {
