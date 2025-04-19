@@ -149,15 +149,12 @@ export FT_EXE_PATH="/home/osteensco/.local/share/fastTravelCLI/fastTravel.exe"
 export FT_PATH="/home/osteensco/.local/share/fastTravelCLI/ftmain.sh"
 #ftend
 
+# source custom scripts and functions
+for file in ~/.dotfiles/scripts/*.sh; do
+    source "$file"
+done
 
-# git checkout to fzf select
-co() {
-    local branch
-    branch=$(git branch --format='%(refname:short)' | fzf)
-    if [[ -n "$branch" ]]; then
-        git checkout "$branch"
-    fi
-}
+
 
 
 
