@@ -11,8 +11,9 @@ fn_meta_data_git["gitco"]="git checkout to fzf select"
 fn_meta_data_git["gitp"]="git push & set upstream"
 
 # nav
-fn_meta_data_nav["cdls"]="navigate to a directory and list it's contents"
-fn_meta_data_nav["mkcd"]="create a directory and then navigate to it"
+fn_meta_data_nav["ftls"]="navigate to a directory and list it's contents"
+fn_meta_data_nav["mkft"]="create a directory and then navigate to it"
+fn_meta_data_nav["ftnew"]="create a directory, navigate in, and set to a fastTravelCLI key"
 
 # meta
 fn_meta_data_meta["fnls"]="show available custom functions"
