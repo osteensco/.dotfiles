@@ -15,3 +15,8 @@ gitco() {
 gitp() {
     git push -u origin $(git rev-parse --abbrev-ref HEAD)
 }
+
+# git branch delete using fzf multi-select
+gitbd() {
+    git branch -d $(git branch | fzf -m)
+}
