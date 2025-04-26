@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# functions relating to shell session, environments, and similar
+
 
 
 declare -A fn_meta_data_git
@@ -18,7 +20,7 @@ fn_meta_data_nav["ftnew"]="create a directory, navigate in, and set to a fastTra
 
 # meta
 fn_meta_data_meta["fnls"]="show available custom functions"
-
+fn_meta_data_meta["pytivate"]="activate python virtual environment from list of available in current project"
 
 
 # show available custom functions
@@ -47,4 +49,8 @@ fnls() {
 }
 
 
+# activate python virtual environment from list of available in current project
+pytivate() {
+    source ~/.local/bin/pytivate -y
+}
 

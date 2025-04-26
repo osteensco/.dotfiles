@@ -49,7 +49,12 @@ for tool in "${TOOLS[@]}"; do
     check_version  "$tool" install_tool
 done
 
+
+
+
+
 # Other tools
+
 
 #python
 py_install() {
@@ -138,6 +143,10 @@ fi
 
 #p10k
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+
+#pytivate
+curl https://raw.githubusercontent.com/osteensco/pytivate/main/src/pytivate.sh -o ~/.local/bin/pytivate && chmod +x ~/.local/bin/pytivate
+
 
 # Add sym links
 ln -sf ~/.dotfiles/.zshrc ~/
