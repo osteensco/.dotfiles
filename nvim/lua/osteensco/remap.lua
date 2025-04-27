@@ -12,7 +12,7 @@ vim.keymap.set('n', '<leader>tp', '<Cmd>Telescope builtin<CR>', { desc = "[T]ele
 vim.keymap.set('n', '<leader>w', '<C-w>', { desc = "window manipulation" })
 
 --Neotree toggle
-vim.keymap.set('n', '<leader>nt', '<Cmd>Neotree toggle<CR>', { desc = 'Toggles Neotree side bar' })
+vim.keymap.set('n', '<leader>nh', '<Cmd>Neotree toggle<CR>', { desc = 'Hide Neotree side bar' })
 vim.keymap.set('n', '<leader>nn', '<Cmd>Neotree toggle<CR><Cmd>Neotree toggle<CR>',
     { desc = 'Refreshes Neotree side bar' })
 vim.keymap.set('n', '<leader>nb', '<Cmd>Neotree buffers float<CR>', { desc = 'Opens Neotree buffers in floating window' })
