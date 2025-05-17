@@ -3,6 +3,6 @@ require('discordStatus').setup({
         "Programming",
         "Coding",
         "Writing software",
-        "Building stuff"
+        "Code vibing"
     }
 })
