@@ -137,10 +137,10 @@ return {
     "otavioschwanck/arrow.nvim",
     -- { dir = "/mnt/d/Programming Stuff/opensauce/arrow.nvim" },
 
-    {
-        'akinsho/toggleterm.nvim',
-        version = '*',
-    },
+    -- {
+    --     'akinsho/toggleterm.nvim',
+    --     version = '*',
+    -- },
 
     {
         'osteensco/discordStatus.nvim',
