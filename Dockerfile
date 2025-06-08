@@ -4,5 +4,7 @@ WORKDIR ~
 
 COPY . ./.dotfiles
 
-CMD /bin/bash -c "bash ./.dotfiles/newenv/install.sh"
+RUN chmod +x ./.dotfiles/newenv/install.sh
+
+CMD bash -c "./.dotfiles/newenv/install.sh && exec bash"
 
