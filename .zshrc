@@ -145,7 +145,7 @@ export CDPATH="$HOME/.local:$CDPATH"
 
 #FastTravel
 export FT_EXE_PATH="$HOME/.local/share/fastTravelCLI/fastTravel.exe"
-. /home/osteensco/.local/share/fastTravelCLI/ftmain.sh
+source $HOME/.local/share/fastTravelCLI/ftmain.sh
 export FT_PATH="$HOME/.local/share/fastTravelCLI/ftmain.sh"
 #ftend
 

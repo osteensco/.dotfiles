@@ -2,6 +2,9 @@
 
 # New environment fresh install
 
+# make sure local bin exists
+mkdir -p "$HOME/.local/bin"
+
 # ID distro
 DISTRO=$(grep '^ID=' /etc/os-release | cut -d '=' -f 2)
 
@@ -123,8 +126,10 @@ check_version tmux tmux_install
 # these need to be installed with zsh active
 zsh_install="
 if [ ! -d \"\$HOME/.oh-my-zsh\" ]; then
-    sh -c \"\$(curl -fsSL https://install.ohmyz.sh)\" -- unattended
+    git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
 fi
+
+chsh -s $(which zsh)
 
 git clone https://github.com/osteensco/fastTravelCLI.git
 cd fastTravelCLI
