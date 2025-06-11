@@ -123,13 +123,15 @@ check_version tmux tmux_install
 #
 ## ---- ---- ---- ---- ---- ---- ----
 
+# make zsh default shell
+chsh -s $(which zsh)
+
 # these need to be installed with zsh active
 zsh_install="
 if [ ! -d \"\$HOME/.oh-my-zsh\" ]; then
     git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
 fi
 
-chsh -s $(which zsh)
 echo !!!!! -- current shell is --
 echo $SHELL
 
