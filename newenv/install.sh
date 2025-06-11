@@ -125,6 +125,8 @@ check_version tmux tmux_install
 
 # make zsh default shell
 chsh -s $(which zsh)
+# update the current session so fastTravelCLI updates the correct config
+export SHELL=$(which zsh)
 
 # these need to be installed with zsh active
 zsh_install="
