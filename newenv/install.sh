@@ -130,8 +130,10 @@ if [ ! -d \"\$HOME/.oh-my-zsh\" ]; then
 fi
 
 chsh -s $(which zsh)
+echo !!!!! -- current shell is --
+echo $SHELL
 
-git clone https://github.com/osteensco/fastTravelCLI.git
+git clone https://github.com/osteensco/fastTravelCLI.git ~/fastTravelCLI
 cd fastTravelCLI
 bash install/linux.sh
 cd ~/
