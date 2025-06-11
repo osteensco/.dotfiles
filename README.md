@@ -14,6 +14,14 @@ Copy the following command and run it inside a bash terminal.
 ```bash
 git clone https://github.com/osteensco/.dotfiles.git && cd .dotfiles && bash ./newenv/install.sh
 ```
+----------------------------------
 
 Ensure tmux plugins get installed - <br>
 `[tmux prefix] (ctrl+e) + I (capital i)`
+<br></br>
+
+Ensure user is owner for local cache dir
+
+```bash
+sudo chown -R $(whoami):$(whoami) ~/.local
+```
