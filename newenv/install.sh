@@ -103,6 +103,9 @@ tmux_install() {
 }
 check_version tmux tmux_install
 
+# tmux plugins
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
 ## ---- UNCOMMENT IF NOT USING WSL ----
 #
 ## In WSL, docker and nerdfont are used by windows directly. These would need to be installed manually if using WSL.
