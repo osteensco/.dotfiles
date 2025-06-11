@@ -134,7 +134,7 @@ echo !!!!! -- current shell is --
 echo $SHELL
 
 git clone https://github.com/osteensco/fastTravelCLI.git ~/fastTravelCLI
-cd fastTravelCLI
+cd ~/fastTravelCLI
 bash install/linux.sh
 cd ~/
 rm -rf ~/fastTravelCLI
