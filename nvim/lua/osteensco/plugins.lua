@@ -9,6 +9,7 @@ return {
     },
 
     "cpea2506/one_monokai.nvim",
+    "folke/tokyonight.nvim",
 
     {
         'nvim-lualine/lualine.nvim',
