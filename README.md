@@ -19,6 +19,7 @@ Copy the following command and run it inside a bash terminal.
 git clone https://github.com/osteensco/.dotfiles.git && cd .dotfiles && bash ./newenv/install.sh
 ```
 ----------------------------------
+<h2>Not WSL Steps</h2>
 
 if not on wsl, install docker and nerd fonts (these need to be downloaded on windows if using wsl)
 <br></br>
@@ -36,6 +37,8 @@ tar -xf Mononoki.tar.xz -C ~/.fonts
 sudo rm Mononoki.tar.xz
 ```
 ----------------------------------
+<h2>TMUX</h2>
+
 Ensure tmux plugins get installed - <br>
 While tmux is active, press `[tmux prefix] (ctrl+e) + I (capital i)`
 <br></br>
