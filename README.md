@@ -1,3 +1,7 @@
+<h2>FedoraLinux-42</h2>
+
+This may or may be an issue on actual fedora, but I experienced it on FedoraLinux-42/wsl2/windows11. Path has the /usr/sbin/ directory early in PATH which is supposed to sym-link to the right place but doesn't seem to. [This solution worked for me](https://learn.microsoft.com/en-us/answers/questions/2074119/launching-wsl-usr-usr-bin-is-not-found-in-the-path)
+
 <h2>Installation</h2>
 
 Install git from your systems package manager
