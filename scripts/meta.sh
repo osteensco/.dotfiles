@@ -21,6 +21,7 @@ fn_meta_data_nav["ftnew"]="create a directory, navigate in, and set to a fastTra
 # meta
 fn_meta_data_meta["fnls"]="show available custom functions"
 fn_meta_data_meta["pytivate"]="activate python virtual environment from list of available in current project"
+fn_meta_data_git["sshstart"]="activate ssh server"
 
 
 # show available custom functions
@@ -54,3 +55,8 @@ pytivate() {
     source ~/.local/bin/pytivate -y
 }
 
+
+# activate ssh server
+sshstart() {
+    sudo systemctl start sshd
+}
