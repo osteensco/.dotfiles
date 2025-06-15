@@ -42,6 +42,8 @@ sudo rm Mononoki.tar.xz
 Ensure tmux plugins get installed - <br>
 While tmux is active, press `[tmux prefix] (ctrl+e) + I (capital i)`
 <br></br>
+----------------------------------
+<h2>Misc</h2>
 
 Ensure user is owner for local cache dir
 
