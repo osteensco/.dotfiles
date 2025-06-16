@@ -27,6 +27,7 @@ telescope.setup({
 
 telescope.load_extension('fzf')
 
+-- telescope mappings
 vim.keymap.set('n', '<leader>tt', builtin.find_files, { desc = '[t]elescope [f]ind [f]iles, looks at all files' })
 vim.keymap.set('n', '<leader>tf', builtin.git_files,
     { desc = '[t]elescope project [f]iles, looks at files within git repo' })
@@ -35,3 +36,4 @@ vim.keymap.set('n', '<leader>ts', function()
     end,
     { desc = '[t]elescopt project [s]earch, takes a string a searches for it in files within git repo' })
 vim.keymap.set('n', '<leader>td', builtin.diagnostics, { desc = '[t]elescope [d]iagnostics' })
+vim.keymap.set('n', '<leader>tr', builtin.resume, { desc = '[t]elescope [r]esume, opens last accessed telescope picker' })
