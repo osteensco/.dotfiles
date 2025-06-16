@@ -1,3 +1,6 @@
+# Show ssh server status
+systemctl status sshd
+
 # Autostart tmux
 if [[ ! -n "$TMUX" && -n "$PS1" ]]; then
     tmux new -A -s main
