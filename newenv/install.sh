@@ -126,6 +126,9 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 #
 ## ---- ---- ---- ---- ---- ---- ----
 
+# set up npm global dir
+npm config set prefix ~/.npm-global
+
 # make zsh default shell
 chsh -s $(which zsh)
 # update the current session so fastTravelCLI updates the correct config
