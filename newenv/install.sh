@@ -58,6 +58,16 @@ done
 
 # Other tools
 
+#lazygit
+lazygit_install() {
+    if [ "$DISTRO" = "fedora" ]; then
+        sudo dnf copr enable atim/lazygit -y
+        sudo dnf install lazygit
+    else 
+        sudo apt install lazygit
+    fi
+}
+check_version lazygit lazygit_install 
 
 #python
 py_install() {
