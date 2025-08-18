@@ -1,5 +1,5 @@
 # Show ssh server status
-systemctl status sshd
+# systemctl status sshd
 
 # Autostart tmux
 if [[ ! -n "$TMUX" && -n "$PS1" ]]; then
