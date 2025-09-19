@@ -86,6 +86,14 @@ return {
     "williamboman/mason-lspconfig.nvim",
     {
         "neovim/nvim-lspconfig",
+        -- opts = {
+        --     automatic_enable = {
+        --         exclude = {
+        --             -- exclude this since it is configured via nvim-jdtls
+        --             'jdtls'
+        --         }
+        --     }
+        -- },
         dependencies = { 'saghen/blink.cmp' },
 
     },
@@ -117,7 +125,8 @@ return {
         opts = {},
     },
 
-
+    -- Java stuff
+    "mfussenegger/nvim-jdtls",
 
 
 }
