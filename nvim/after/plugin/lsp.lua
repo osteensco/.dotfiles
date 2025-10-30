@@ -1,4 +1,4 @@
-local lspconfig = require("lspconfig")
+local lspconfig = vim.lsp.config
 
 local mason_lspconfig = require("mason-lspconfig")
 
@@ -70,27 +70,30 @@ mason_lspconfig.setup({
         "html",
         "jsonls",
         "jdtls"
-    }
-})
-
--- generic fallback setup
-mason_lspconfig.setup_handlers({
-    function(server_name)
-        lspconfig[server_name].setup {
-            on_attach = on_attach,
-            capabilities = capabilities,
-            settings = {
-                [server_name] = {
-                    ["ui.semanticTokens"] = true
+    },
+    -- generic fallback setup
+    handlers = {
+        function(server_name)
+            lspconfig(server_name, setup {
+                on_attach = on_attach,
+                capabilities = capabilities,
+                settings = {
+                    [server_name] = {
+                        ["ui.semanticTokens"] = true
+                    }
                 }
-            }
-        }
-    end
+            })
+        end,
+        jdtls = function()
+            -- empty function so that mason-lspconfig ignores jdtls.
+            -- this is necessary so that we can effectively use nvim-jdtls
+        end
+    }
 })
 
 
 -- language specific setups
-lspconfig.lua_ls.setup({
+lspconfig("lua_ls", {
     on_attach = on_attach,
     on_init = function(client)
         if client.workspace_folders then
@@ -136,7 +139,7 @@ lspconfig.lua_ls.setup({
 --     }
 -- })
 
-lspconfig.basedpyright.setup({
+lspconfig("basedpyright", {
     on_attach = on_attach,
     capabilities = capabilities,
     settings = {
@@ -150,6 +153,11 @@ lspconfig.basedpyright.setup({
     }
 })
 
+lspconfig("jdtls", {
+    capabilities = capabilities,
+    on_attach = on_attach
+})
+vim.lsp.enable("jdtls")
 -- Java
 -- vim.api.nvim_create_autocmd('FileType', {pattern = 'java', callback = function (args)
 --     require("jdtls.jdtls_setup").setup()
