@@ -129,15 +129,15 @@ lspconfig("lua_ls", {
 })
 
 
--- lspconfig.gopls.setup({
---     on_attach = on_attach,
---     capabilities = capabilities,
---     settings = {
---         gopls = {
---             directoryFilters = { "-**/node_modules" }
---         }
---     }
--- })
+lspconfig("gopls", {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+        gopls = {
+            directoryFilters = { "-**/node_modules" }
+        }
+    }
+})
 
 lspconfig("basedpyright", {
     on_attach = on_attach,
