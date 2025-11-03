@@ -134,6 +134,7 @@ lspconfig("gopls", {
     capabilities = capabilities,
     settings = {
         gopls = {
+            ["ui.semanticTokens"] = true,
             directoryFilters = { "-**/node_modules" }
         }
     }
