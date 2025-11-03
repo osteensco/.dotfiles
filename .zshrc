@@ -135,7 +135,15 @@ if [ -n "$WSL_INTEROP" ]; then
 fi
 
 
-
+#FZF Defaults
+export FZF_DEFAULT_OPTS="--style full --border --padding 1,2 --border-label ' FZF ' --input-label ' Input ' \
+    --header-label ' Type ' --list-label ' Matches ' --preview-label ' Preview '\
+    --preview 'fzf-preview.sh {}' --bind 'focus:transform-header:file --brief {}'\
+    --color 'border:#aaaaaa,label:#cccccc' \
+    --color 'preview-border:#9999cc,preview-label:#ccccff' \
+    --color 'list-border:#669966,list-label:#99cc99' \
+    --color 'input-border:#996666,input-label:#ffcccc' \
+    --color 'header-border:#6699cc,header-label:#99ccff'"
 
 #PATH
 export PATH="$HOME/.local/bin:$PATH"
@@ -147,6 +155,7 @@ export PATH="$HOME/.npm-global/bin:$PATH"
 export CDPATH="$HOME/.local:$CDPATH"
 
 #ENV VARS
+
 
 #FastTravel
 export FT_EXE_PATH="$HOME/.local/share/fastTravelCLI/fastTravel.exe"
