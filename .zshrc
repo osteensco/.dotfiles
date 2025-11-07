@@ -155,7 +155,7 @@ export PATH="$HOME/.npm-global/bin:$PATH"
 export CDPATH="$HOME/.local:$CDPATH"
 
 #ENV VARS
-
+export COLORTERM=truecolor
 
 #FastTravel
 export FT_EXE_PATH="$HOME/.local/share/fastTravelCLI/fastTravel.exe"
