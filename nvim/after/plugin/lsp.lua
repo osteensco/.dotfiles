@@ -2,24 +2,45 @@ local lspconfig = vim.lsp.config
 
 local mason_lspconfig = require("mason-lspconfig")
 
-local lsp_zero = require("lsp-zero")
+-- diagnostics
+local diagnostic_view_group = vim.api.nvim_create_augroup("diagnosticView", { clear = true })
+local toggle_diagnostics = function()
+    local group_len = vim.api.nvim_get_autocmds({ group = "diagnosticView" })
+    if #group_len == 0 then
+        vim.api.nvim_create_autocmd('CursorMoved', {
+            callback = function()
+                local win = vim.api.nvim_get_current_win()
+                local width = vim.api.nvim_win_get_width(win)
+                local col = width
+                local _, float = vim.diagnostic.open_float(
+                    nil,
+                    { scope = "line", border = "rounded" }
+                )
+                if not float then
+                    return
+                end
+                vim.api.nvim_win_set_config(float,
+                    {
+                        win = win,
+                        relative = "win",
+                        anchor = "NE",
+                        row = 0,
+                        col = col,
+                    })
+            end
+        })
+    else
+        vim.api.nvim_clear_autocmds({ group = "diagnosticView" })
+    end
+    vim.api.nvim_exec_autocmds('CursorMoved', { group = "diagnosticView" })
+end
 
-vim.diagnostic.config({
-    float = {
-        border = 'rounded',
-    },
-})
-vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
-    vim.lsp.handlers.hover,
-    { border = 'rounded' }
-)
+vim.keymap.set({ 'n', 'v' }, '<leader>dt', toggle_diagnostics, { desc = "[d]iagnostic [t]oggle floating window" })
 
-vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
-    vim.lsp.handlers.signature_help,
-    { border = 'rounded' }
-)
 
-local on_attach = function(_, bufnr)
+
+
+local on_attach = function(client, bufnr)
     local bufmap = function(keys, func, desc)
         vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
     end
@@ -38,29 +59,41 @@ local on_attach = function(_, bufnr)
     bufmap('<leader>S', require('telescope.builtin').lsp_dynamic_workspace_symbols,
         'lsp action - Telescope lsp_dynamic_workspace_symbols. looks everywhere.')
 
-    bufmap('K', vim.lsp.buf.hover, 'lsp action - hover docs')
+    bufmap('K',
+        function(opts)
+            opts = opts or {}
+            opts.border = "rounded"
+            vim.lsp.buf.hover(opts)
+        end,
+        'lsp action - hover docs'
+    )
 
-    vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-        vim.lsp.buf.format()
-    end, {})
+    -- jdtls is buggy with the auto formatter so we just skip that
+    print(client.name)
+    if client.name == "jdtls" then
+        return
+    end
+
+    -- autoformater
+    local auto_format_group = vim.api.nvim_create_augroup("autoformater", { clear = true })
+    vim.api.nvim_create_autocmd('BufWritePre', {
+        group = auto_format_group,
+        buffer = bufnr,
+        callback = function()
+            vim.lsp.buf.format({ async = false })
+        end
+    })
 end
 
 local capabilities = require("blink.cmp").get_lsp_capabilities()
-
---autoformater
-lsp_zero.extend_lspconfig({
-    sign_text = true,
-    lsp_attach = function(client, bufnr)
-        lsp_zero.buffer_autoformat()
-    end
-})
 
 require('mason').setup({
     PATH = "/usr/local/go/bin:" .. vim.fn.getenv("PATH")
 })
 mason_lspconfig.setup({
+    -- mason-lspconfig throws a warning about jdtls, so it's excluded in ensure_installed
     ensure_installed = {
-        -- "sqlls",
+        "sqlls",
         "gopls",
         "lua_ls",
         "basedpyright",
@@ -69,25 +102,19 @@ mason_lspconfig.setup({
         "cssls",
         "html",
         "jsonls",
-        "jdtls"
+        -- "jdtls"
     },
-    -- generic fallback setup
-    handlers = {
-        function(server_name)
-            lspconfig(server_name, setup {
-                on_attach = on_attach,
-                capabilities = capabilities,
-                settings = {
-                    [server_name] = {
-                        ["ui.semanticTokens"] = true
-                    }
-                }
-            })
-        end,
-        jdtls = function()
-            -- empty function so that mason-lspconfig ignores jdtls.
-            -- this is necessary so that we can effectively use nvim-jdtls
-        end
+    -- mason_lspconfig by default auto enables lsp servers listed under ensure_installed
+})
+
+-- base config
+vim.lsp.config('*', {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+        ['*'] = {
+            ["ui.semanticTokens"] = true
+        }
     }
 })
 
@@ -155,11 +182,14 @@ lspconfig("basedpyright", {
 })
 
 lspconfig("jdtls", {
-    capabilities = capabilities,
-    on_attach = on_attach
+    settings = {
+        java = {
+            format = {
+                enabled = false,
+            },
+        },
+    },
 })
+-- mason-lspconfig throws a warning about jdtls, so it's excluded in ensure_installed
+-- this means we have to manually enable it here
 vim.lsp.enable("jdtls")
--- Java
--- vim.api.nvim_create_autocmd('FileType', {pattern = 'java', callback = function (args)
---     require("jdtls.jdtls_setup").setup()
--- end})

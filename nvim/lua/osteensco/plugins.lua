@@ -30,11 +30,18 @@ return {
             "MunifTanjim/nui.nvim",
         }
     },
+
+    -- treesitter
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
     },
+    {
+        "nvim-treesitter/nvim-treesitter-textObjects",
+    },
 
+
+    -- completions
     {
         'saghen/blink.cmp',
         dependencies = {
@@ -78,7 +85,14 @@ return {
                 nerd_font_variant = 'mono'
             },
 
-            signature = { enabled = true }
+            signature = {
+                window = { border = "rounded" },
+                enabled = true
+            },
+
+            completion = {
+                menu = { border = "rounded" }
+            },
         },
     },
 
@@ -102,7 +116,7 @@ return {
 
     "sindrets/diffview.nvim",
 
-    { 'VonHeikemen/lsp-zero.nvim', branch = 'v4.x' },
+
 
     "otavioschwanck/arrow.nvim",
 
@@ -126,7 +140,7 @@ return {
     },
 
     -- Java stuff
-    "mfussenegger/nvim-jdtls",
+    -- "mfussenegger/nvim-jdtls",
 
 
 }
