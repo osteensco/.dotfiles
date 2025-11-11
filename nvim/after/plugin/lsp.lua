@@ -4,17 +4,19 @@ local mason_lspconfig = require("mason-lspconfig")
 
 -- diagnostics
 local diagnostic_view_group = vim.api.nvim_create_augroup("diagnosticView", { clear = true })
+local diagnostic_bufnr_cache = {}
 local toggle_diagnostics = function()
     local group_len = vim.api.nvim_get_autocmds({ group = "diagnosticView" })
     if #group_len == 0 then
         vim.api.nvim_create_autocmd('CursorMoved', {
+            group = diagnostic_view_group,
             callback = function()
                 local win = vim.api.nvim_get_current_win()
                 local width = vim.api.nvim_win_get_width(win)
                 local col = width
-                local _, float = vim.diagnostic.open_float(
+                local bufnr, float = vim.diagnostic.open_float(
                     nil,
-                    { scope = "line", border = "rounded" }
+                    { scope = "line", border = "rounded", focusable = false }
                 )
                 if not float then
                     return
@@ -26,11 +28,21 @@ local toggle_diagnostics = function()
                         anchor = "NE",
                         row = 0,
                         col = col,
-                    })
+                    }
+                )
+                if not diagnostic_bufnr_cache[bufnr] then
+                    table.insert(diagnostic_bufnr_cache, bufnr)
+                end
             end
         })
     else
         vim.api.nvim_clear_autocmds({ group = "diagnosticView" })
+        for _, buf in ipairs(diagnostic_bufnr_cache) do
+            local buffer_windows = vim.fn.win_findbuf(buf)
+            for _, buf_win in ipairs(buffer_windows) do
+                pcall(vim.api.nvim_win_close, buf_win, true)
+            end
+        end
     end
     vim.api.nvim_exec_autocmds('CursorMoved', { group = "diagnosticView" })
 end
