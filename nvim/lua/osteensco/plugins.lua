@@ -120,10 +120,10 @@ return {
 
     "otavioschwanck/arrow.nvim",
 
-    -- {
-    --     'akinsho/toggleterm.nvim',
-    --     version = '*',
-    -- },
+    {
+        "sphamba/smear-cursor.nvim",
+        opts = {},
+    },
 
     {
         'osteensco/discordStatus.nvim',
