@@ -71,5 +71,7 @@ vim.keymap.set({ 'n', 'v' }, '-', '0', { noremap = true, silent = true })
 -- fix indentation
 vim.keymap.set({ 'n', 'v' }, '$', '=', { noremap = true, silent = true })
 
+-- search highlighted text in current buffer
+vim.keymap.set('v', '<leader>n', '<Esc>/<C-r><C-w><CR>')
 
 --
