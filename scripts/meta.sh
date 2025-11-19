@@ -12,6 +12,7 @@ declare -A fn_meta_data_meta
 fn_meta_data_git["gitco"]="git checkout to fzf select"
 fn_meta_data_git["gitp"]="git push & set upstream"
 fn_meta_data_git["gitbd"]="git branch delete using fzf multi-select"
+fn_meta_data_git["gitsync"]="git catch up local branch with remote of same name and rebase current branch to it"
 
 # nav
 fn_meta_data_nav["ftls"]="navigate to a directory and list it's contents"
