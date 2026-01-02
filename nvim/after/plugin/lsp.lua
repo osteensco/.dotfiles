@@ -81,10 +81,10 @@ local on_attach = function(client, bufnr)
     )
 
     -- jdtls is buggy with the auto formatter so we just skip that
-    print(client.name)
-    if client.name == "jdtls" then
-        return
-    end
+    -- print(client.name)
+    -- if client.name == "jdtls" then
+    --     return
+    -- end
 
     -- autoformater
     local auto_format_group = vim.api.nvim_create_augroup("autoformater", { clear = true })
@@ -92,7 +92,7 @@ local on_attach = function(client, bufnr)
         group = auto_format_group,
         buffer = bufnr,
         callback = function()
-            vim.lsp.buf.format({ async = false })
+            vim.lsp.buf.format({bufnr = bufnr, id = client.id, async = false })
         end
     })
 end
@@ -109,7 +109,7 @@ mason_lspconfig.setup({
         "gopls",
         "lua_ls",
         "basedpyright",
-        "ts_ls",
+        "tsgo",
         "bashls",
         "cssls",
         "html",
@@ -197,6 +197,7 @@ lspconfig("jdtls", {
     settings = {
         java = {
             format = {
+                comments = {enabled = false},
                 enabled = false,
             },
         },
