@@ -135,6 +135,10 @@ if [ -n "$WSL_INTEROP" ]; then
 fi
 
 
+# vi mode (basic vim motions)
+bindkey -v
+
+
 #FZF Defaults
 export FZF_DEFAULT_OPTS="--style full --border --padding 1,2 --border-label ' FZF ' --input-label ' Input ' \
     --header-label ' Type ' --list-label ' Matches ' --preview-label ' Preview '\
@@ -174,5 +178,5 @@ done
 
 
 
-autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /usr/bin/terraform terraform
+# autoload -U +X bashcompinit && bashcompinit
+# complete -o nospace -C /usr/bin/terraform terraform
