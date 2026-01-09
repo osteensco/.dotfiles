@@ -1,0 +1,13 @@
+
+
+
+
+ - cli command / script that copies specific file to dotfiles repo
+    - full path relative to $HOME is maintained (~/dotfiles/ == ~/)
+ - post-commit apply hook
+ - bi-directional: 
+    - from repo copy to appropriate locations
+    - update specific file(s) or all files into repo
+    - changes always forced overwrite
+ - utilize a json path map from dotfiles repo to real file location when os specific differences exist
+
