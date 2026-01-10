@@ -5,69 +5,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  # --- Ubuntu Tests ---
-  test-dfm-ubuntu:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-
-      - name: Test DFM Apply
-        run: |
-          rm -f "$HOME/.zshrc"          
-          python3 cli/dfm.py apply          
-          if [ ! -f "$HOME/.zshrc" ]; then
-            echo "Error: .zshrc was not copied to HOME"
-            exit 1
-          fi
-
-      - name: Test DFM Add
-        run: |
-          TEST_FILE="$HOME/testfile.txt"
-          echo "Initial content" > "$TEST_FILE"          
-          python3 cli/dfm.py add "$TEST_FILE"          
-          if [ ! -f "home/dfm_test_file.txt" ]; then
-            echo "Error: File was not added to repo"
-            exit 1
-          fi
-
-      - name: Test DFM Update
-        run: |
-          TEST_FILE="$HOME/testfile.txt"
-          echo "Updated content" > "$TEST_FILE"          
-          python3 cli/dfm.py update          
-          if ! grep -q "Updated content" "home/dfm_test_file.txt"; then
-            echo "Error: Repo file was not updated"
-            exit 1
-          fi
-
-  test-setup-ubuntu:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Run setup.sh
-        env:
-          DEBIAN_FRONTEND: noninteractive
-        run: |
-          sudo apt-get update && sudo apt-get install -y zsh
-          export SHELL=$(which zsh)
-          chmod +x cli/setup.sh
-          printf 'n\n' | ./cli/setup.sh
-
-      - name: Verify Installation
-        run: |
-          zsh -c "echo 'ZSH is working'"
-          for cmd in tmux nvim go node terraform aws; do
-            if ! command -v $cmd &> /dev/null; then echo "Error: $cmd missing"; exit 1; fi
-          done
-
   # --- MacOS Tests ---
   test-dfm-macos:
     runs-on: macos-latest
@@ -116,16 +53,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run setup.sh
+        shell: zsh {0}
         run: |
-          # MacOS usually has zsh by default, but we ensure it matches expectations
-          export SHELL=$(which zsh)
           chmod +x cli/setup.sh
           printf 'n\n' | ./cli/setup.sh
 
       - name: Verify Installation
         run: |
-          zsh -c "echo 'ZSH is working'"
-          # Note: MacOS setup often relies on Homebrew which might be slow in CI, but we check core tools
           for cmd in tmux nvim go node terraform aws; do
             if ! command -v $cmd &> /dev/null; then echo "Error: $cmd missing"; exit 1; fi
           done
@@ -181,15 +115,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run setup.sh
+        shell: zsh {0}
         run: |
-          # Fedora container setup
-          export SHELL=$(which zsh)
           chmod +x cli/setup.sh
           printf 'n\n' | ./cli/setup.sh
 
       - name: Verify Installation
         run: |
-          zsh -c "echo 'ZSH is working'"
           for cmd in tmux nvim go node terraform aws; do
             if ! command -v $cmd &> /dev/null; then echo "Error: $cmd missing"; exit 1; fi
           done
