@@ -10,9 +10,7 @@ brew install git
 ```bash
 dnf install git
 ```
-```bash
-apt install git
-```
+
 
 Copy the following command and run it inside a bash terminal.
 
