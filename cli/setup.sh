@@ -1,117 +1,185 @@
 #!/usr/bin/env bash
 
-set -e
+failed_installs=()
+handle_error() {
+    local failed_command="$BASH_COMMAND"
+    local exit_code=$?
+    failed_installs+=("Error during: $failed_command"$'\n'" - $exit_code")
+}
+trap 'handle_error' ERR
+set +e
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-DFM="$REPO_ROOT/new/dfm.py"
+DFM="$REPO_ROOT/cli/dfm.py"
 
 echo "Starting Dotfiles Installation..."
 
 # --- OS Detection ---
 OS="$(uname -s)"
-DISTRO=""
-if [ "$OS" = "Linux" ]; then
-    if [ -f /etc/os-release ]; then
-        . /etc/os-release
-        DISTRO=$ID
-    fi
-fi
 
-# --- Package Manager Selection ---
+
+# --- Package Manager Detection ---
 PKG_MANAGER=""
-if [ "$OS" = "Darwin" ]; then
-    if command -v brew &> /dev/null; then
-        PKG_MANAGER="brew"
-    else
-        echo "Homebrew not found. Would you like to install it? (y/n)"
-        read -r install_brew
-        if [ "$install_brew" = "y" ]; then
-            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-            PKG_MANAGER="brew"
-        else
-            echo "Cannot proceed without a package manager."
-            exit 1
-        fi
-    fi
-elif [ "$OS" = "Linux" ]; then
-    if [ "$DISTRO" = "fedora" ]; then
-        PKG_MANAGER="dnf"
-    elif [ "$DISTRO" = "ubuntu" ] || [ "$DISTRO" = "debian" ] || [ "$DISTRO" = "pop" ]; then
-        PKG_MANAGER="apt"
-    elif command -v apt &> /dev/null; then
-        PKG_MANAGER="apt"
-    elif command -v dnf &> /dev/null; then
-        PKG_MANAGER="dnf"
-    fi
+if command -v brew >/dev/null 2>&1; then
+    PKG_MANAGER="brew"
+elif command -v apt >/dev/null 2>&1; then
+    PKG_MANAGER="apt"
+elif command -v dnf >/dev/null 2>&1; then
+    PKG_MANAGER="dnf"
+elif command -v pacman >/dev/null 2>&1; then
+    PKG_MANAGER="pacman"
 fi
 
-echo "Detected OS: $OS ($DISTRO)"
-echo "Selected Package Manager: $PKG_MANAGER"
-echo "Press Enter to confirm or type manually (apt/dnf/brew):"
-read -r user_pkg_manager
-if [ -n "$user_pkg_manager" ]; then
-    PKG_MANAGER="$user_pkg_manager"
+echo "Detected OS: $OS"
+echo "Detected Package Manager: ${PKG_MANAGER:-Not Found}"
+
+if [ -z $PKG_MANAGER ]; then
+    echo "No package manager detected. Install a package manager and retry installation script."
+    exit 1
 fi
 
 # --- Git Configuration ---
 echo "--- Git Configuration ---"
-current_name=$(git config --global user.name)
-current_email=$(git config --global user.email)
 
-echo "Current Git Name: ${current_name:-Not Set}"
-echo "Current Git Email: ${current_email:-Not Set}"
-
-echo "Enter Git Name (leave empty to keep current):"
-read -r git_name
-if [ -n "$git_name" ]; then
-    git config --global user.name "$git_name"
+if ! command -v git >/dev/null 2>&1; then
+    $PKG_MANAGER install git    
 fi
 
-echo "Enter Git Email (leave empty to keep current):"
-read -r git_email
-if [ -n "$git_email" ]; then
-    git config --global user.email "$git_email"
+gitconfig() {
+    local current_name=$(git config --global user.name 2>/dev/null)
+    local current_email=$(git config --global user.email 2>/dev/null)
+
+    echo "Current Git Name: ${current_name:-Not Set}"
+    echo "Current Git Email: ${current_email:-Not Set}"
+
+    echo "Enter Git Name (leave empty to keep current):"
+    read -r git_name
+    if [ -n "$git_name" ]; then
+        git config --global user.name "$git_name"
+    fi
+
+    echo "Enter Git Email (leave empty to keep current):"
+    read -r git_email
+    if [ -n "$git_email" ]; then
+        git config --global user.email "$git_email"
+    fi
+}
+
+echo "Do you want to configure git now? (y/n) "
+read -r answer
+if [[ "$answer" == [yY] ]]; then
+    echo "Continuing..."
+    gitconfig
+else
+    echo "Skipping..."
 fi
+
 
 # --- Package Installation ---
 echo "--- Installing Packages ---"
-PACKAGES=(curl tree wget zsh git gh fzf jq tmux neovim)
 
-# Add OS specific packages or adjustments
 if [ "$PKG_MANAGER" = "brew" ]; then
-    # MacOS specific names if different
+    PACKAGES=(unzip curl tree wget zsh gh fzf jq tmux neovim lazygit make awscli go node python3 lua pipx docker)
+    if [ "$OS" = "Darwin" ]; then
+        PACKAGES+=(colima)
+    fi
     brew update
+    brew upgrade
     brew install "${PACKAGES[@]}"
-    brew install ripgrep fd lazygit
-    brew install --cask font-meslo-lg-nerd-font
+
+    # terraform
+    brew tap hashicorp/tap
+    brew install hashicorp/tap/terraform
+
+    # posting
+    pipx ensurepath
+    pipx install posting
+
 elif [ "$PKG_MANAGER" = "apt" ]; then
+    PACKAGES=(build-essential unzip curl tree wget zsh gh fzf jq tmux neovim python3 python3-venv python3-pip pipx lua5.4 podman podman-compose)
+    sudo add-apt-repository ppa:neovim-ppa/stable
     sudo apt update
-    sudo apt install -y "${PACKAGES[@]}" build-essential python3-venv python3-pip
-    # Lazygit on apt usually requires PPA or manual, simplfied here or use go install if available
+    sudo apt install -y "${PACKAGES[@]}"
+
+    # golang
+    sudo rm -rf /usr/local/go 
+    sudo tar -C /usr/local -xzf go1.25.5.linux-amd64.tar.gz
+
+    # lazygit
+    sudo go install github.com/jesseduffield/lazygit@latest
+
+    # terraform
+    wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+    sudo apt update && sudo apt install terraform
+
+    # posting
+    pipx ensurepath
+    pipx install posting
+
+    # aws cli
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    unzip awscliv2.zip
+    sudo ./aws/install
+    rm -rf aws awscliv2.zip
+
+    # nodejs
+    sudo apt install npm nodejs
+    sudo npm -g install n
+    sudo n install latest
+    sudo npm install -g npm
+
 elif [ "$PKG_MANAGER" = "dnf" ]; then
+    PACKAGES=(unzip curl fontconfig tree wget zsh fzf jq tmux neovim make awscli golang nodejs python3 python3-pip python3-virtualenv pipx lua)
     sudo dnf update -y
-    sudo dnf install -y "${PACKAGES[@]}" python3-pip
+    sudo dnf install -y "${PACKAGES[@]}"
+
+    # gh cli
+    sudo dnf install dnf5-plugins
+    sudo dnf config-manager addrepo --from-repofile=https://cli.github.com/packages/rpm/gh-cli.repo
+    sudo dnf install gh --repo gh-cli
+
+    # lazygit
     sudo dnf copr enable atim/lazygit -y
     sudo dnf install -y lazygit
+
+    # terraform
+    wget -O- https://rpm.releases.hashicorp.com/fedora/hashicorp.repo | sudo tee /etc/yum.repos.d/hashicorp.repo
+    sudo dnf -y install terraform
+
+    # posting
+    pipx ensurepath
+    pipx install posting
+    
+    # aws cli
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    unzip awscliv2.zip
+    sudo ./aws/install
+    rm -rf aws awscliv2.zip
+
+    # Mononoki Nerd Font
+    curl -Lo "$HOME/Mononoki.tar.xz" https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Mononoki.tar.xz
+    FONT_DIR="${HOME}/.local/share/fonts"
+    mkdir -p "$FONT_DIR"
+    tar -xf "$HOME/Mononoki.tar.xz" -C "$FONT_DIR"
+    fc-cache -fv "$FONT_DIR"
+
+
+# TODO: packman
+# elif [ "$PKG_MANAGER" = "podman" ]; then
+#     PACKAGES=(curl tree wget zsh gh fzf jq tmux neovim lazygit make posting awscli golang node python lua)
+#     sudo packman update
+#     sudo packman install -y "${PACKAGES[@]}"
+
 fi
 
-# Language runtimes (Python/Node/Go handled differently per preferences, keeping simple for now based on previous install.sh)
-# Ensure Python3
-if ! command -v python3 &> /dev/null; then
-    echo "Python3 not found, attempting install..."
-    if [ "$PKG_MANAGER" = "apt" ]; then sudo apt install -y python3; fi
-    if [ "$PKG_MANAGER" = "dnf" ]; then sudo dnf install -y python3; fi
-    if [ "$PKG_MANAGER" = "brew" ]; then brew install python3; fi
-fi
-
-# --- Dotfiles Sync ---
-echo "--- Syncing Dotfiles ---"
-# Ensure executable
+# --- Dotfiles Setup ---
+echo "--- Applying Dotfiles ---"
 chmod +x "$DFM"
 "$DFM" apply
 
 # --- Shell Setup ---
-# Switch to Zsh if not already
+echo "--- Setting up ZSH ---"
 if [ "$SHELL" != "$(which zsh)" ]; then
     echo "Changing default shell to zsh..."
     chsh -s "$(which zsh)"
@@ -145,6 +213,7 @@ fi
 
 # --- Post-Commit Hook ---
 echo "--- Setting up Git Hooks ---"
+git init
 HOOK_PATH="$REPO_ROOT/.git/hooks/post-commit"
 cat <<EOF > "$HOOK_PATH"
 #!/bin/bash
@@ -155,12 +224,34 @@ EOF
 chmod +x "$HOOK_PATH"
 echo "Post-commit hook installed."
 
-# --- FastTravel & Pytivate (Legacy support) ---
-# Installing pytivate
+# --- fastTravelCLI and pytivate ---
+echo "--- Installing Custom Tools ---"
+# pytivate
 if [ ! -f "$HOME/.local/bin/pytivate" ]; then
     mkdir -p "$HOME/.local/bin"
     curl https://raw.githubusercontent.com/osteensco/pytivate/main/src/pytivate.sh -o ~/.local/bin/pytivate && chmod +x ~/.local/bin/pytivate
 fi
+# fastTravelCLI
+git clone --depth 1 https://github.com/osteensco/fastTravelCLI.git
+(
+cd fastTravelCLI
+if [ "$OS" = "Darwin" ]; then
+    bash install/mac.sh
+else
+    bash install/linux.sh
+fi
+)
+rm -rf fastTravelCLI
 
-echo "--- Installation Complete! ---"
+
+echo "--- Setup Complete! ---"
+
+if [ ${#failed_installs[@]} -ne 0 ]; then
+    echo "The following failed: "
+    printf '%s\n' "${failed_installs[@]}"
+    exit 1
+fi
+
 echo "Please restart your shell."
+
+

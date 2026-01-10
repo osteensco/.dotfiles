@@ -1,7 +1,5 @@
 {
     "mac": {
-        "lazygit": {
-            ".config": "Library/Application Support"
-        }
+        ".config/lazygit/config.yml": "Library/Application Support/lazygit/config.yml"
     }
 }

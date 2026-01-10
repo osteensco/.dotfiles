@@ -4,7 +4,7 @@ WORKDIR ~
 
 COPY . ./.dotfiles
 
-RUN chmod +x ./.dotfiles/cmds/install.sh
+RUN chmod +x ./.dotfiles/cli/setup.sh
 
-CMD bash -c "./.dotfiles/cmds/install.sh && exec bash"
+CMD bash -c "./.dotfiles/cli/setup.sh && exec bash"
 
