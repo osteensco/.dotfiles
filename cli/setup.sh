@@ -137,7 +137,7 @@ chmod +x "$DFM"
 
 # --- Shell Setup ---
 echo "--- Setting up ZSH ---"
-if [ "$SHELL" != "$(which zsh)" ]; then
+if [ "$SHELL" != "$(which zsh)" && ! "$TEST_RUNNER" ]; then
     echo "Changing default shell to zsh..."
     chsh -s "$(which zsh)"
 fi

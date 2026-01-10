@@ -48,6 +48,8 @@ jobs:
 
   test-setup-macos:
     runs-on: macos-latest
+    env:
+      TEST_RUNNER: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -55,7 +57,6 @@ jobs:
       - name: Run setup.sh
         shell: zsh {0}
         run: |
-          zsh
           chmod +x cli/setup.sh
           printf 'n\n' | ./cli/setup.sh
 
@@ -108,6 +109,8 @@ jobs:
   test-setup-fedora:
     runs-on: ubuntu-latest
     container: fedora:latest
+    env:
+      TEST_RUNNER: true
     steps:
       - name: Install dependencies
         run: dnf install -y git which util-linux sudo passwd zsh
