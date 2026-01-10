@@ -55,6 +55,7 @@ jobs:
       - name: Run setup.sh
         shell: zsh {0}
         run: |
+          zsh
           chmod +x cli/setup.sh
           printf 'n\n' | ./cli/setup.sh
 
