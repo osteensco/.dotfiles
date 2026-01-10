@@ -8,6 +8,8 @@ handle_error() {
 }
 trap 'handle_error' ERR
 set +e
+set -o errtrace
+set -o pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DFM="$REPO_ROOT/cli/dfm.py"
@@ -22,12 +24,8 @@ OS="$(uname -s)"
 PKG_MANAGER=""
 if command -v brew >/dev/null 2>&1; then
     PKG_MANAGER="brew"
-elif command -v apt >/dev/null 2>&1; then
-    PKG_MANAGER="apt"
 elif command -v dnf >/dev/null 2>&1; then
     PKG_MANAGER="dnf"
-elif command -v pacman >/dev/null 2>&1; then
-    PKG_MANAGER="pacman"
 fi
 
 echo "Detected OS: $OS"
@@ -46,6 +44,11 @@ if ! command -v git >/dev/null 2>&1; then
 fi
 
 gitconfig() {
+    if ! command -v git >/dev/null 2>&1; then
+        read -r cmd
+        $cmd
+    fi
+
     local current_name=$(git config --global user.name 2>/dev/null)
     local current_email=$(git config --global user.email 2>/dev/null)
 
@@ -95,40 +98,6 @@ if [ "$PKG_MANAGER" = "brew" ]; then
     pipx ensurepath
     pipx install posting
 
-elif [ "$PKG_MANAGER" = "apt" ]; then
-    PACKAGES=(build-essential unzip curl tree wget zsh gh fzf jq tmux neovim python3 python3-venv python3-pip pipx lua5.4 podman podman-compose)
-    sudo add-apt-repository ppa:neovim-ppa/stable
-    sudo apt update
-    sudo apt install -y "${PACKAGES[@]}"
-
-    # golang
-    sudo rm -rf /usr/local/go 
-    sudo tar -C /usr/local -xzf go1.25.5.linux-amd64.tar.gz
-
-    # lazygit
-    sudo go install github.com/jesseduffield/lazygit@latest
-
-    # terraform
-    wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-    sudo apt update && sudo apt install terraform
-
-    # posting
-    pipx ensurepath
-    pipx install posting
-
-    # aws cli
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-    unzip awscliv2.zip
-    sudo ./aws/install
-    rm -rf aws awscliv2.zip
-
-    # nodejs
-    sudo apt install npm nodejs
-    sudo npm -g install n
-    sudo n install latest
-    sudo npm install -g npm
-
 elif [ "$PKG_MANAGER" = "dnf" ]; then
     PACKAGES=(unzip curl fontconfig tree wget zsh fzf jq tmux neovim make awscli golang nodejs python3 python3-pip python3-virtualenv pipx lua)
     sudo dnf update -y
@@ -163,13 +132,6 @@ elif [ "$PKG_MANAGER" = "dnf" ]; then
     mkdir -p "$FONT_DIR"
     tar -xf "$HOME/Mononoki.tar.xz" -C "$FONT_DIR"
     fc-cache -fv "$FONT_DIR"
-
-
-# TODO: packman
-# elif [ "$PKG_MANAGER" = "podman" ]; then
-#     PACKAGES=(curl tree wget zsh gh fzf jq tmux neovim lazygit make posting awscli golang node python lua)
-#     sudo packman update
-#     sudo packman install -y "${PACKAGES[@]}"
 
 fi
 
