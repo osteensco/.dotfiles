@@ -28,7 +28,7 @@ jobs:
 
       - name: Test DFM Add
         run: |
-          TEST_FILE="$HOME/dfm_test_file.txt"
+          TEST_FILE="$HOME/testfile.txt"
           echo "Initial content" > "$TEST_FILE"          
           python3 cli/dfm.py add "$TEST_FILE"          
           if [ ! -f "home/dfm_test_file.txt" ]; then
@@ -38,7 +38,7 @@ jobs:
 
       - name: Test DFM Update
         run: |
-          TEST_FILE="$HOME/dfm_test_file.txt"
+          TEST_FILE="$HOME/testfile.txt"
           echo "Updated content" > "$TEST_FILE"          
           python3 cli/dfm.py update          
           if ! grep -q "Updated content" "home/dfm_test_file.txt"; then

@@ -85,7 +85,7 @@ def command_add(args):
     mappings = load_mappings()
     repo_file = resolve_reverse_mapping(target_file, mappings)
     repo_file = REPO_HOME / repo_file
-    copy_file(target_file, repo_file)
+    copy_file(HOME / target_file, repo_file)
 
 def command_update_all(args):
     """System -> Repo (All tracked files)"""
