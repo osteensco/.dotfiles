@@ -1,0 +1,131 @@
+name: Dotfiles Tests
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  # --- MacOS Tests ---
+  test-dfm-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Test DFM Apply
+        run: |
+          rm -f "$HOME/.zshrc"          
+          python3 cli/dfm.py apply          
+          if [ ! -f "$HOME/.zshrc" ]; then
+            echo "Error: .zshrc was not copied to HOME"
+            exit 1
+          fi
+
+      - name: Test DFM Add
+        run: |
+          TEST_FILE="$HOME/dfm_test_file.txt"
+          echo "Initial content" > "$TEST_FILE"          
+          python3 cli/dfm.py add "$TEST_FILE"          
+          if [ ! -f "home/dfm_test_file.txt" ]; then
+            echo "Error: File was not added to repo"
+            exit 1
+          fi
+
+      - name: Test DFM Update
+        run: |
+          TEST_FILE="$HOME/dfm_test_file.txt"
+          echo "Updated content" > "$TEST_FILE"          
+          python3 cli/dfm.py update          
+          if ! grep -q "Updated content" "home/dfm_test_file.txt"; then
+            echo "Error: Repo file was not updated"
+            exit 1
+          fi
+
+  test-setup-macos:
+    runs-on: macos-latest
+    env:
+      TEST_RUNNER: true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run setup.sh
+        shell: zsh {0}
+        run: |
+          chmod +x cli/setup.sh
+          printf 'n\n' | ./cli/setup.sh
+
+      - name: Verify Installation
+        run: |
+          for cmd in tmux nvim go node terraform aws; do
+            if ! command -v $cmd &> /dev/null; then echo "Error: $cmd missing"; exit 1; fi
+          done
+
+  # --- Fedora Tests ---
+  test-dfm-fedora:
+    runs-on: ubuntu-latest
+    container: fedora:latest
+    steps:
+      - name: Install dependencies
+        run: dnf install -y git python3
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Test DFM Apply
+        run: |
+          rm -f "$HOME/.zshrc"          
+          python3 cli/dfm.py apply          
+          if [ ! -f "$HOME/.zshrc" ]; then
+            echo "Error: .zshrc was not copied to HOME"
+            exit 1
+          fi
+
+      - name: Test DFM Add
+        run: |
+          TEST_FILE="$HOME/dfm_test_file.txt"
+          echo "Initial content" > "$TEST_FILE"          
+          python3 cli/dfm.py add "$TEST_FILE"          
+          if [ ! -f "home/dfm_test_file.txt" ]; then
+            echo "Error: File was not added to repo"
+            exit 1
+          fi
+
+      - name: Test DFM Update
+        run: |
+          TEST_FILE="$HOME/dfm_test_file.txt"
+          echo "Updated content" > "$TEST_FILE"          
+          python3 cli/dfm.py update          
+          if ! grep -q "Updated content" "home/dfm_test_file.txt"; then
+            echo "Error: Repo file was not updated"
+            exit 1
+          fi
+
+  test-setup-fedora:
+    runs-on: ubuntu-latest
+    container: fedora:latest
+    env:
+      TEST_RUNNER: true
+    steps:
+      - name: Install dependencies
+        run: dnf install -y git which util-linux sudo passwd zsh
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run setup.sh
+        shell: zsh {0}
+        run: |
+          chmod +x cli/setup.sh
+          printf 'n\n' | ./cli/setup.sh
+
+      - name: Verify Installation
+        run: |
+          for cmd in tmux nvim go node terraform aws; do
+            if ! command -v $cmd &> /dev/null; then echo "Error: $cmd missing"; exit 1; fi
+          done

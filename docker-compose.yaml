@@ -1,11 +1,17 @@
 services:
-  dotfiles_test:
-    build: 
-      context: .
-      dockerfile: Dockerfile
-    container_name: osteensco_dotfiles_test
+  dotfiles_test_fedora:
+    image: dotfiles:fedora
+    container_name: osteensco_dotfiles_test_fedora
     volumes:
-        - .:/root/.dotfiles
+      - .:/root/.dotfiles
+    stdin_open: true
+    tty: true
+
+  dotfiles_test_brew:
+    image: dotfiles:brew
+    container_name: osteensco_dotfiles_test_brew
+    volumes:
+      - .:/root/.dotfiles
     stdin_open: true
     tty: true
 
