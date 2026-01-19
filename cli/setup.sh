@@ -130,6 +130,10 @@ elif [ "$PKG_MANAGER" = "dnf" ]; then
 
 fi
 
+# --- ensure programs are in path ---
+export PATH="/usr/local/bin:/usr/bin:$HOME/.local/bin:$PATH"
+hash -r
+
 # --- Dotfiles Setup ---
 echo "--- Applying Dotfiles ---"
 chmod +x "$DFM"
