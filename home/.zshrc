@@ -180,5 +180,15 @@ done
 
 # ---- tmux autostart ----
 if [[ -o interactive && -z "$TMUX" && -t 0 ]]; then
-    tmux attach -t main 2>/dev/null || tmux attach
+    if tmux has-session -t main 2>/dev/null; then
+        if [[ -n "$SSH_CONNECTION" ]]; then
+            # Create a unique session name per SSH client
+            session_name="ssh-$(echo $HOSTNAME)-$(echo $SSH_CLIENT | awk '{print $1}')"
+            tmux new-session -s "$session_name"
+        else
+            tmux attach -t main
+        fi
+    else
+        tmux new -s main
+    fi
 fi
