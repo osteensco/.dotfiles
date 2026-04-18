@@ -99,7 +99,7 @@ if [ "$PKG_MANAGER" = "brew" ]; then
     pipx install posting
 
 elif [ "$PKG_MANAGER" = "dnf" ]; then
-    PACKAGES=(unzip curl fontconfig tree wget zsh gh fzf jq tmux neovim make awscli golang nodejs python3 python3-pip python3-virtualenv pipx lua)
+    PACKAGES=(unzip curl fontconfig tree wget zsh gh fzf jq tmux neovim make awscli golang nodejs python3 python3-pip python3-virtualenv pipx lua podman podman-docker podman-compose)
     sudo dnf update -y
     sudo dnf install -y "${PACKAGES[@]}"
 

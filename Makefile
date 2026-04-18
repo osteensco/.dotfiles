@@ -28,13 +28,13 @@ debian-build: ## Build Debian image
 
 # ---- Runners ----
 fedora-run: ## Run Fedora test container
-	docker-compose run --rm $(FEDORA_SERVICE)
+	docker compose run --rm $(FEDORA_SERVICE)
 
 brew-run: ## Run Homebrew test container
-	docker-compose run --rm $(BREW_SERVICE)
+	docker compose run --rm $(BREW_SERVICE)
 
 debian-run: ## Run Debian test container
-	docker-compose run --rm $(DEBIAN_SERVICE)
+	docker compose run --rm $(DEBIAN_SERVICE)
 
 
 

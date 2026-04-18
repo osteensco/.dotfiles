@@ -65,9 +65,11 @@ jobs:
           for cmd in tmux nvim go node terraform aws; do
             if ! command -v $cmd &> /dev/null; then echo "Error: $cmd missing"; exit 1; fi
           done
+          printf '\033[0;32m✓ all expected commands installed\033[0m\n'
 
       - name: Verify post-commit hook fires and applies
         run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           test -x .git/hooks/post-commit || { echo "Error: hook missing or not executable"; exit 1; }
           git config user.email ci@test
           git config user.name ci
@@ -76,6 +78,7 @@ jobs:
           git commit -m "hook test" 2>&1 | tee /tmp/hook.out
           grep -q "Applying dotfiles changes" /tmp/hook.out || { echo "Error: hook did not run"; exit 1; }
           test -f "$HOME/.hooktest" || { echo "Error: apply did not copy file"; exit 1; }
+          printf '\033[0;32m✓ post-commit hook verified\033[0m\n'
 
   # --- Fedora Tests ---
   test-dfm-fedora:
@@ -140,9 +143,11 @@ jobs:
           for cmd in tmux nvim go node terraform aws; do
             if ! command -v $cmd &> /dev/null; then echo "Error: $cmd missing"; exit 1; fi
           done
+          printf '\033[0;32m✓ all expected commands installed\033[0m\n'
 
       - name: Verify post-commit hook fires and applies
         run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           test -x .git/hooks/post-commit || { echo "Error: hook missing or not executable"; exit 1; }
           git config user.email ci@test
           git config user.name ci
@@ -151,3 +156,4 @@ jobs:
           git commit -m "hook test" 2>&1 | tee /tmp/hook.out
           grep -q "Applying dotfiles changes" /tmp/hook.out || { echo "Error: hook did not run"; exit 1; }
           test -f "$HOME/.hooktest" || { echo "Error: apply did not copy file"; exit 1; }
+          printf '\033[0;32m✓ post-commit hook verified\033[0m\n'
