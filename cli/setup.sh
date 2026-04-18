@@ -141,7 +141,7 @@ chmod +x "$DFM"
 
 # --- Shell Setup ---
 echo "--- Setting up ZSH ---"
-if [ "$SHELL" != "$(which zsh)" && ! "$TEST_RUNNER" ]; then
+if [[ "$SHELL" != "$(which zsh)" && -z "$TEST_RUNNER" ]]; then
     echo "Changing default shell to zsh..."
     chsh -s "$(which zsh)"
 fi
@@ -174,11 +174,11 @@ fi
 
 # --- Post-Commit Hook ---
 echo "--- Setting up Git Hooks ---"
-git init
 HOOK_PATH="$REPO_ROOT/.git/hooks/post-commit"
-cat <<EOF > "$HOOK_PATH"
+cat <<'EOF' > "$HOOK_PATH"
 #!/bin/bash
 # Auto-apply dotfiles on commit
+DFM="$(git rev-parse --show-toplevel)/cli/dfm.py"
 echo "Applying dotfiles changes..."
 "$DFM" apply
 EOF

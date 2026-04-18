@@ -66,6 +66,17 @@ jobs:
             if ! command -v $cmd &> /dev/null; then echo "Error: $cmd missing"; exit 1; fi
           done
 
+      - name: Verify post-commit hook fires and applies
+        run: |
+          test -x .git/hooks/post-commit || { echo "Error: hook missing or not executable"; exit 1; }
+          git config user.email ci@test
+          git config user.name ci
+          touch home/.hooktest
+          git add home/.hooktest
+          git commit -m "hook test" 2>&1 | tee /tmp/hook.out
+          grep -q "Applying dotfiles changes" /tmp/hook.out || { echo "Error: hook did not run"; exit 1; }
+          test -f "$HOME/.hooktest" || { echo "Error: apply did not copy file"; exit 1; }
+
   # --- Fedora Tests ---
   test-dfm-fedora:
     runs-on: ubuntu-latest
@@ -129,3 +140,14 @@ jobs:
           for cmd in tmux nvim go node terraform aws; do
             if ! command -v $cmd &> /dev/null; then echo "Error: $cmd missing"; exit 1; fi
           done
+
+      - name: Verify post-commit hook fires and applies
+        run: |
+          test -x .git/hooks/post-commit || { echo "Error: hook missing or not executable"; exit 1; }
+          git config user.email ci@test
+          git config user.name ci
+          touch home/.hooktest
+          git add home/.hooktest
+          git commit -m "hook test" 2>&1 | tee /tmp/hook.out
+          grep -q "Applying dotfiles changes" /tmp/hook.out || { echo "Error: hook did not run"; exit 1; }
+          test -f "$HOME/.hooktest" || { echo "Error: apply did not copy file"; exit 1; }
