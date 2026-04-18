@@ -153,7 +153,6 @@ export PATH="/usr/local/go/bin:$PATH"
 export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
 export PATH="/usr/local/bin:$PATH"
 export PATH="$HOME/.npm-global/bin:$PATH"
-export PATH="$HOME/.dotfiles/cli:$PATH"
 
 #ENV VARS
 export COLORTERM=truecolor

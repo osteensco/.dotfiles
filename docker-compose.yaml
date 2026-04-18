@@ -3,7 +3,7 @@ services:
     image: dotfiles:fedora
     container_name: osteensco_dotfiles_test_fedora
     volumes:
-      - .:/root/.dotfiles
+      - .:/root/.dotfiles:Z
     stdin_open: true
     tty: true
 
@@ -11,7 +11,7 @@ services:
     image: dotfiles:brew
     container_name: osteensco_dotfiles_test_brew
     volumes:
-      - .:/root/.dotfiles
+      - .:/root/.dotfiles:Z
     stdin_open: true
     tty: true
 

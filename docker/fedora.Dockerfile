@@ -1,6 +1,6 @@
 FROM fedora:latest
 
-WORKDIR ~
+WORKDIR /root
 
 COPY . ./.dotfiles
 

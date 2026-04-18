@@ -9,7 +9,7 @@ from pathlib import Path
 
 # Constants
 HOME = Path.home()
-REPO_ROOT = Path(__file__).parent.parent.resolve()
+REPO_ROOT = Path(__file__).resolve().parent.parent
 REPO_HOME = REPO_ROOT / "home"
 MAP_FILE = REPO_ROOT / "mappings.json"
 IS_MAC = platform.system().lower() == "darwin"

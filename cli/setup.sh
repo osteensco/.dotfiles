@@ -99,7 +99,7 @@ if [ "$PKG_MANAGER" = "brew" ]; then
     pipx install posting
 
 elif [ "$PKG_MANAGER" = "dnf" ]; then
-    PACKAGES=(unzip curl fontconfig tree wget zsh gh fzf jq tmux neovim make awscli golang nodejs python3 python3-pip python3-virtualenv pipx lua)
+    PACKAGES=(unzip curl fontconfig tree wget zsh gh fzf jq tmux neovim make awscli golang nodejs python3 python3-pip python3-virtualenv pipx lua podman podman-docker podman-compose)
     sudo dnf update -y
     sudo dnf install -y "${PACKAGES[@]}"
 
@@ -137,11 +137,13 @@ hash -r
 # --- Dotfiles Setup ---
 echo "--- Applying Dotfiles ---"
 chmod +x "$DFM"
+mkdir -p "$HOME/.local/bin"
+ln -sf "$DFM" "$HOME/.local/bin/dfm"
 "$DFM" apply
 
 # --- Shell Setup ---
 echo "--- Setting up ZSH ---"
-if [ "$SHELL" != "$(which zsh)" && ! "$TEST_RUNNER" ]; then
+if [[ "$SHELL" != "$(which zsh)" && -z "$TEST_RUNNER" ]]; then
     echo "Changing default shell to zsh..."
     chsh -s "$(which zsh)"
 fi
@@ -174,11 +176,11 @@ fi
 
 # --- Post-Commit Hook ---
 echo "--- Setting up Git Hooks ---"
-git init
 HOOK_PATH="$REPO_ROOT/.git/hooks/post-commit"
-cat <<EOF > "$HOOK_PATH"
+cat <<'EOF' > "$HOOK_PATH"
 #!/bin/bash
 # Auto-apply dotfiles on commit
+DFM="$(git rev-parse --show-toplevel)/cli/dfm.py"
 echo "Applying dotfiles changes..."
 "$DFM" apply
 EOF

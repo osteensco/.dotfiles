@@ -1,6 +1,6 @@
 FROM homebrew/brew:latest
 
-WORKDIR ~
+WORKDIR /root
 
 COPY . ./.dotfiles
 
