@@ -137,6 +137,8 @@ hash -r
 # --- Dotfiles Setup ---
 echo "--- Applying Dotfiles ---"
 chmod +x "$DFM"
+mkdir -p "$HOME/.local/bin"
+ln -sf "$DFM" "$HOME/.local/bin/dfm"
 "$DFM" apply
 
 # --- Shell Setup ---
